@@ -1,25 +1,44 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { PushAPI } from "@pushprotocol/restapi";
 import { createSocketConnection, EVENTS } from "@pushprotocol/socket";
 import { ethers } from "ethers";
+import { useState } from "react";
 
-const signer = ethers.Wallet.createRandom();
+// const inbox = async () => {
+//   // const [walletAdress, setWalletAddress] = useState("");
+//   //   return (
+//   //     // <div>
+//   //     //   <h1>This is inbox</h1>
+//   //     //   <Input
+//   //     //     placeholder="Enter the wallet address"
+//   //     //     // onChange={(e) => }
+//   //     //   />
+//   //     //   {/* <Input placeholder="" /> */}
+//   //     //   <Button>Click to send Message</Button>
+//   //     // </div>
+//   //   );
+// };
+const inbox = async () => {
+  // console.log(reciverWalletAddress);
+  const [reciverWalletAddress, setReciverWalletAddress] = useState("");
+  console.log(reciverWalletAddress);
+  const sendMessage = async () => {
+    const signer = ethers.Wallet.createRandom();
+    const userAryan = await PushAPI.initialize(signer, { env: "stagging" });
 
-const userAryan = await PushAPI.initialize(signer, { env: "staging" });
+    const userShivank = "0x5A1dE476BF6DAa8A802C346a9D9118F772dCe838";
 
-const toWalletConnect = "0x0540d716c6d621948F5A0d33680E2969c33E66c5";
-const sendMesssage = async () => {
-  const aliceMessageBob = await userAryan.chat.send(toWalletConnect, {
-    content: "Hello there this is the request from the code",
-    type: "Text",
-  });
-};
-const aryanChats = await userAryan.chat.list("CHATS");
-console.log(aryanChats);
-const inbox = () => {
+    const aryanMessageShivak = await userAryan.chat.send(userShivank, {
+      content: "Heyy shivank",
+    });
+  };
   return (
     <div>
-      <h1>This is inbox</h1>
-      <button onClick={sendMesssage}>Send Message</button>
+      <div>
+        <Input onChange={(e) => setReciverWalletAddress(e.target.value)} />
+        <Button onClick={sendMessage} />
+      </div>
     </div>
   );
 };
